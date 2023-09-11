@@ -12,7 +12,10 @@
     <body>
     <h1>Selected Products</h1>
     <hr>
-    <a href="selectOutProduct">Select More Products</a><br>
+    <form action="{{ route('selectOutProduct') }}" method="GET">
+    @csrf
+    <button type="submit" class="btn btn-primary">Select More Products</button>
+</form>
     <a href="dashboard">Back to dashboard</a>
     
     <table class="table">
@@ -24,19 +27,20 @@
             </tr>
         </thead>
         <tbody>
-            @if (count($selectedProducts) > 0)
-                @foreach ($selectedProducts as $product)
+        @if (!empty($mergedProducts) && count($mergedProducts) > 0)
+        @foreach ($mergedProducts as $product)
                     <tr>
                         <td>{{ $product->productName }}</td>
-                        <td>{{ $product->productPrice }}</td>
+                        <td>${{ $product->productPrice }}</td>
                         <td>{{ $product->productQuantity }}</td>
                     </tr>
                 @endforeach
-            @else
-                <tr>
-                    <td colspan="7">No selected products.</td>
-                </tr>
-            @endif
+                @else
+            <tr>
+                <td colspan="3">No selected products.</td>
+               
+            </tr>
+        @endif
         </tbody>
     </table>
 </div>

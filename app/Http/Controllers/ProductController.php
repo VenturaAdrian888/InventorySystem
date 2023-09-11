@@ -136,12 +136,32 @@ public function outProduct(Request $request)
         $selectedProducts = Product::whereIn('id', $productIds)->get();
     }
 
+     // Retrieve and merge previously selected products from the session
+     $previouslySelectedProducts = session('selectedProducts', collect());
+     $mergedProducts = $previouslySelectedProducts->merge($selectedProducts);
+
+     // Store the merged products back in the session
+     session(['selectedProducts' => $mergedProducts]);
+
+     return view('product.outProduct', compact('mergedProducts'));
+
     return view('product.outProduct', compact('selectedProducts'));
+
 }
 
-    public function selectOutProduct(){
+    public function selectOutProduct(Request $request){
 
-        $products = Product::all();
-        return view('product.selectOutProduct', compact('products'));
+        $searchTerm = $request->input('searchTerm');
+
+    // Fetch products based on the search term or fetch all products if no search term is provided
+    $products = empty($searchTerm)
+        ? Product::all()
+        : Product::where('productName', 'like', '%' . $searchTerm . '%')
+            ->orWhere('productDescription', 'like', '%' . $searchTerm . '%')
+            ->get();
+
+   
+
+    return view('product.selectOutProduct', compact('products', 'searchTerm'));
     }
 }

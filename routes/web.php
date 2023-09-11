@@ -28,13 +28,12 @@ Route::get('/logout',[AuthenticationController::class,'logout']);
 Route::get('/dashboard',[AuthenticationController::class, 'dashboard']) -> middleware('isLoggedIn')->name('dashboard');
 
 //in products
-Route::post('/addProduct', [ProductController::class, 'addProduct']);
-Route::get('/add-product', [ProductController::class, 'addPushProduct'])->name('add-product');
+Route::get('/addProduct', [ProductController::class, 'addProduct']);
+Route::post('/add-product', [ProductController::class, 'addPushProduct'])->name('add-product');
 
 //out products
-Route::get('/outProduct', [ProductController::class, 'outProduct'])->name('outProduct');
-Route::get('/selectOutProduct', [ProductController::class, 'selectOutProduct'])->name('selectOutProduct');
-
+Route::match(['get', 'post'],'/outProduct', [ProductController::class, 'outProduct'])->name('outProduct');
+Route::match(['get', 'post'], '/selectOutProduct', [ProductController::class, 'selectOutProduct'])->name('selectOutProduct');
 //edit
 Route::get('product/edit/{id}',[ProductController::class, 'editProduct'])->name('product.edit');
 Route::post('product/pushEdit/{id}', [ProductController::class, 'editPushProduct'])->name('push-edit');
@@ -45,6 +44,6 @@ Route::get('/product/remove/{id}', [ProductController::class , 'removeProduct'])
 //useWebcam
 Route::get('/webcam' , [ProductController::class, 'webcam'])->name('webcam');
 
-//product sort
+//product sort search
 Route::match(['get', 'post'], '/search', [ProductController::class, 'searchProduct'])->name('search');
 
